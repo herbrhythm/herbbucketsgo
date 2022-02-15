@@ -65,7 +65,7 @@ func (s *Buckets) GrantUploadInfo(opt *UploadOptions) (*WebuploadInfo, error) {
 func (s *Buckets) GrantDownloadInfo(object string, ttl int64) (*DownloadInfo, error) {
 	var result = &DownloadInfo{}
 	params := url.Values{}
-	params.Add(QueryFieldTTL, strconv.FormatInt(ttl, 64))
+	params.Add(QueryFieldTTL, strconv.FormatInt(ttl, 10))
 	_, err := s.PresetGrantDownladInfo.Concat(fetcher.PathSuffix(object), fetcher.Params(params)).FetchAndParse(fetcher.Should200(fetcher.AsJSON(result)))
 	if err != nil {
 		return nil, err
@@ -86,6 +86,10 @@ func (s *Buckets) Save(filename string, data []byte) (*SaveResult, error) {
 	var result = &SaveResult{}
 	var writer = fetcher.NewMultiPartWriter()
 	err := writer.WriteFile(PostFieldFile, filename, bytes.NewBuffer(data))
+	if err != nil {
+		return nil, err
+	}
+	err = writer.Close()
 	if err != nil {
 		return nil, err
 	}
