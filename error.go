@@ -34,3 +34,16 @@ func (e *UnprocessableEntityError) MustDump(w http.ResponseWriter) {
 	_, err = w.Write(data)
 	panic(err)
 }
+
+func TryDumpError(err error, w http.ResponseWriter) {
+	if err == ErrNotExist {
+		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+		return
+	}
+	e, ok := err.(*UnprocessableEntityError)
+	if ok {
+		e.MustDump(w)
+		return
+	}
+	panic(err)
+}
