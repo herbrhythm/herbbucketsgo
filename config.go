@@ -19,35 +19,35 @@ type Config struct {
 func (c Config) Apply(b *Buckets) error {
 	var err error
 	if c.URLGrantUploadInfo == "" {
-		c.URLGrantUploadInfo = path.Join(c.Server.URL, "api", "grantuploadinfo")
+		c.URLGrantUploadInfo = c.Server.URL + "/api/grantuploadinfo"
 	}
 	b.PresetGrantUploadInfo, err = c.Server.MergeURL(c.URLGrantUploadInfo).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLGrantDownloadInfo == "" {
-		c.URLGrantDownloadInfo = path.Join(c.Server.URL, "api", "grantdownloadinfo")
+		c.URLGrantDownloadInfo = c.Server.URL + "/api/grantdownloadinfo"
 	}
 	b.PresetGrantDownladInfo, err = c.Server.MergeURL(c.URLGrantDownloadInfo).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLContent == "" {
-		c.URLContent = path.Join(c.Server.URL, "api", "content")
+		c.URLContent = c.Server.URL + "api/content"
 	}
 	b.PresetContent, err = c.Server.MergeURL(c.URLContent).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLSave == "" {
-		c.URLSave = path.Join(c.Server.URL, "api", "content")
+		c.URLSave = c.Server.URL + "/api/content"
 	}
 	b.PresetSave, err = c.Server.MergeURL(c.URLSave).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLRemove == "" {
-		c.URLRemove = path.Join(c.Server.URL, "api", "remove")
+		c.URLRemove = c.Server.URL + "/api/remove"
 	}
 	b.PresetRemove, err = c.Server.MergeURL(c.URLRemove).CreatePreset()
 	if err != nil {
