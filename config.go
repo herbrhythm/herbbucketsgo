@@ -1,10 +1,16 @@
 package herbbucketsgo
 
 import (
+	"net/url"
 	"path"
 
 	"github.com/herb-go/fetcher"
 )
+
+func join(u url.URL, ele string) string {
+	u.Path = path.Join(u.Path, ele)
+	return u.String()
+}
 
 type Config struct {
 	*fetcher.Server
@@ -18,22 +24,26 @@ type Config struct {
 
 func (c Config) Apply(b *Buckets) error {
 	var err error
+	u, err := url.Parse(c.Server.URL)
+	if err != nil {
+		return err
+	}
 	if c.URLGrantUploadInfo == "" {
-		c.URLGrantUploadInfo = c.Server.URL + "/api/grantuploadinfo"
+		c.URLGrantUploadInfo = join(*u, "/api/grantuploadinfo")
 	}
 	b.PresetGrantUploadInfo, err = c.Server.MergeURL(c.URLGrantUploadInfo).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLGrantDownloadInfo == "" {
-		c.URLGrantDownloadInfo = c.Server.URL + "/api/grantdownloadinfo"
+		c.URLGrantDownloadInfo = join(*u, "/api/grantdownloadinfo")
 	}
 	b.PresetGrantDownladInfo, err = c.Server.MergeURL(c.URLGrantDownloadInfo).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLContent == "" {
-		c.URLContent = c.Server.URL + "api/content"
+		c.URLContent = join(*u, "/api/content")
 	}
 	b.PresetContent, err = c.Server.MergeURL(c.URLContent).CreatePreset()
 	if err != nil {
@@ -47,14 +57,14 @@ func (c Config) Apply(b *Buckets) error {
 		return err
 	}
 	if c.URLRemove == "" {
-		c.URLRemove = c.Server.URL + "/api/remove"
+		c.URLRemove = join(*u, "/api/remove")
 	}
 	b.PresetRemove, err = c.Server.MergeURL(c.URLRemove).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLInfo == "" {
-		c.URLInfo = path.Join(c.Server.URL, "api", "remove")
+		c.URLInfo = join(*u, "/api/remove")
 	}
 	b.PresetInfo, err = c.Server.MergeURL(c.URLInfo).CreatePreset()
 	if err != nil {
