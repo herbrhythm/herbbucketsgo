@@ -45,6 +45,7 @@ func New() *Buckets {
 }
 
 type Buckets struct {
+	Bucket                 string
 	PresetGrantUploadInfo  *fetcher.Preset
 	PresetGrantDownladInfo *fetcher.Preset
 	PresetContent          *fetcher.Preset

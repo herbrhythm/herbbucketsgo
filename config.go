@@ -14,6 +14,7 @@ func join(u url.URL, ele string) string {
 
 type Config struct {
 	*fetcher.Server
+	Bucket               string
 	URLGrantUploadInfo   string
 	URLGrantDownloadInfo string
 	URLContent           string
@@ -70,5 +71,6 @@ func (c Config) Apply(b *Buckets) error {
 	if err != nil {
 		return err
 	}
+	b.Bucket = c.Bucket
 	return nil
 }
