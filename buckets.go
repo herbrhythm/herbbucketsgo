@@ -58,7 +58,7 @@ func (s *Buckets) GrantUploadInfo(bucket string, opt *UploadOptions) (*Webupload
 	params := url.Values{}
 	params.Add(QueryFieldFilename, opt.Filename)
 	params.Add(QueryFieldTTL, opt.TTL)
-	params.Add(QueryFieldSizelimit, opt.Sizelimit)
+	params.Add(QueryFieldSizeLimit, opt.SizeLimit)
 	params.Add(QueryFieldSize, opt.Size)
 	_, err := s.PresetGrantUploadInfo.Concat(fetcher.PathJoin(bucket), fetcher.Params(params)).FetchAndParse(fetcher.Should200(fetcher.AsJSON(result)))
 	if err != nil {
