@@ -44,7 +44,6 @@ func (c Config) Apply(b *Buckets) error {
 	if err != nil {
 		return err
 	}
-
 	if c.URLComplete == "" {
 		c.URLComplete = join(*u, "/complete")
 	}
@@ -52,6 +51,7 @@ func (c Config) Apply(b *Buckets) error {
 	if err != nil {
 		return err
 	}
+	b.PresetCompete = b.PresetCompete.Concat(fetcher.Post)
 	if c.URLContent == "" {
 		c.URLContent = join(*u, "/api/content")
 	}
@@ -66,6 +66,8 @@ func (c Config) Apply(b *Buckets) error {
 	if err != nil {
 		return err
 	}
+	b.PresetSave = b.PresetSave.Concat(fetcher.Post)
+
 	if c.URLRemove == "" {
 		c.URLRemove = join(*u, "/api/remove")
 	}
@@ -73,6 +75,7 @@ func (c Config) Apply(b *Buckets) error {
 	if err != nil {
 		return err
 	}
+	b.PresetRemove = b.PresetRemove.Concat(fetcher.Post)
 	if c.URLInfo == "" {
 		c.URLInfo = join(*u, "/api/remove")
 	}
