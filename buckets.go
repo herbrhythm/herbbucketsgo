@@ -16,11 +16,10 @@ type SaveResult struct {
 
 type WebuploadInfo struct {
 	ID             string
-	UploadURL      string
-	PreviewURL     string
-	Permanent      bool
 	Bucket         string
 	Object         string
+	UploadURL      string
+	CompleteURL    string
 	UploadType     string
 	SizeLimit      int64
 	ExpiredAt      int64
@@ -44,10 +43,19 @@ func New() *Buckets {
 	return &Buckets{}
 }
 
+type CompleteInfo struct {
+	ID      string
+	Bucket  string
+	Object  string
+	Size    int64
+	Preview *DownloadInfo
+}
+
 type Buckets struct {
 	Bucket                 string
 	PresetGrantUploadInfo  *fetcher.Preset
 	PresetGrantDownladInfo *fetcher.Preset
+	PresetCompete          *fetcher.Preset
 	PresetContent          *fetcher.Preset
 	PresetSave             *fetcher.Preset
 	PresetRemove           *fetcher.Preset
@@ -73,6 +81,15 @@ func (s *Buckets) GrantDownloadInfo(bucket string, object string, ttl int64) (*D
 	params := url.Values{}
 	params.Add(QueryFieldTTL, strconv.FormatInt(ttl, 10))
 	_, err := s.PresetGrantDownladInfo.Concat(fetcher.PathJoin(bucket), fetcher.PathJoin(object), fetcher.Params(params)).FetchAndParse(fetcher.Should200(fetcher.AsJSON(result)))
+	if err != nil {
+		return nil, convertErr(err)
+	}
+	return result, nil
+}
+
+func (s *Buckets) Complete(opt *CompleteOptions) (*CompleteInfo, error) {
+	var result = &CompleteInfo{}
+	_, err := s.PresetCompete.Concat(fetcher.Params(*opt.Encode())).FetchAndParse(fetcher.Should200(fetcher.AsJSON(result)))
 	if err != nil {
 		return nil, convertErr(err)
 	}

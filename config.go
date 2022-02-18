@@ -17,6 +17,7 @@ type Config struct {
 	Bucket               string
 	URLGrantUploadInfo   string
 	URLGrantDownloadInfo string
+	URLComplete          string
 	URLContent           string
 	URLSave              string
 	URLRemove            string
@@ -40,6 +41,14 @@ func (c Config) Apply(b *Buckets) error {
 		c.URLGrantDownloadInfo = join(*u, "/api/grantdownloadinfo")
 	}
 	b.PresetGrantDownladInfo, err = c.Server.MergeURL(c.URLGrantDownloadInfo).CreatePreset()
+	if err != nil {
+		return err
+	}
+
+	if c.URLComplete == "" {
+		c.URLComplete = join(*u, "/complete")
+	}
+	b.PresetCompete, err = c.Server.MergeURL(c.URLComplete).CreatePreset()
 	if err != nil {
 		return err
 	}
