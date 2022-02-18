@@ -19,7 +19,7 @@ type WebuploadInfo struct {
 	Bucket         string
 	Object         string
 	UploadURL      string
-	CompleteURL    string
+	Complete       string
 	UploadType     string
 	SizeLimit      int64
 	ExpiredAt      int64
