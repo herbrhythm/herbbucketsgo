@@ -27,7 +27,7 @@ func (o *CompleteOptions) Encode() *url.Values {
 	params := &url.Values{}
 	params.Add("id", o.ID)
 	params.Add("bucket", o.Bucket)
-	params.Add("objcet", o.Object)
+	params.Add("object", o.Object)
 	params.Add("ts", o.Timestamp)
 	params.Add("sign", o.Sign)
 	return params
