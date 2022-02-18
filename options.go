@@ -36,7 +36,7 @@ func (o *CompleteOptions) Decode(r *http.Request) {
 	q := r.URL.Query()
 	o.ID = q.Get("id")
 	o.Bucket = q.Get("bucket")
-	o.Object = q.Get("objcet")
+	o.Object = q.Get("object")
 	o.Timestamp = q.Get("ts")
 	o.Sign = q.Get("sign")
 }
