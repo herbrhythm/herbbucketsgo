@@ -19,7 +19,10 @@ type PlainLenReader struct {
 	Length int
 }
 
-func NewReader(r io.Reader, length int) LenReader {
+func NewReader() *PlainLenReader {
+	return &PlainLenReader{}
+}
+func WrapReader(r io.Reader, length int) LenReader {
 	return &PlainLenReader{
 		Reader: r,
 		Length: length,
