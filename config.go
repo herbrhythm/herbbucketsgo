@@ -1,6 +1,7 @@
 package herbbucketsgo
 
 import (
+	"net/http"
 	"net/url"
 	"path"
 
@@ -14,6 +15,7 @@ func join(u url.URL, ele string) string {
 
 type Config struct {
 	*fetcher.Server
+	Passthrough          bool
 	Bucket               string
 	URLGrantUploadInfo   string
 	URLGrantDownloadInfo string
@@ -33,25 +35,24 @@ func (c Config) Apply(b *Buckets) error {
 	if c.URLGrantUploadInfo == "" {
 		c.URLGrantUploadInfo = join(*u, "/api/grantuploadinfo")
 	}
-	b.PresetGrantUploadInfo, err = c.Server.MergeURL(c.URLGrantUploadInfo).CreatePreset()
+	b.PresetGrantUploadInfo, err = c.Server.MergeURL(c.URLGrantUploadInfo).MergeMethod(http.MethodPost).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLGrantDownloadInfo == "" {
 		c.URLGrantDownloadInfo = join(*u, "/api/grantdownloadinfo")
 	}
-	b.PresetGrantDownladInfo, err = c.Server.MergeURL(c.URLGrantDownloadInfo).CreatePreset()
+	b.PresetGrantDownladInfo, err = c.Server.MergeURL(c.URLGrantDownloadInfo).MergeMethod(http.MethodPost).CreatePreset()
 	if err != nil {
 		return err
 	}
 	if c.URLComplete == "" {
 		c.URLComplete = join(*u, "/complete")
 	}
-	b.PresetCompete, err = c.Server.MergeURL(c.URLComplete).CreatePreset()
+	b.PresetComplete, err = c.Server.MergeURL(c.URLComplete).MergeMethod(http.MethodPost).CreatePreset()
 	if err != nil {
 		return err
 	}
-	b.PresetCompete = b.PresetCompete.Concat(fetcher.Post)
 	if c.URLContent == "" {
 		c.URLContent = join(*u, "/api/content")
 	}
@@ -62,27 +63,26 @@ func (c Config) Apply(b *Buckets) error {
 	if c.URLSave == "" {
 		c.URLSave = c.Server.URL + "/api/content"
 	}
-	b.PresetSave, err = c.Server.MergeURL(c.URLSave).CreatePreset()
+	b.PresetSave, err = c.Server.MergeURL(c.URLSave).MergeMethod(http.MethodPost).CreatePreset()
 	if err != nil {
 		return err
 	}
-	b.PresetSave = b.PresetSave.Concat(fetcher.Post)
 
 	if c.URLRemove == "" {
 		c.URLRemove = join(*u, "/api/remove")
 	}
-	b.PresetRemove, err = c.Server.MergeURL(c.URLRemove).CreatePreset()
+	b.PresetRemove, err = c.Server.MergeURL(c.URLRemove).MergeMethod(http.MethodPost).CreatePreset()
 	if err != nil {
 		return err
 	}
-	b.PresetRemove = b.PresetRemove.Concat(fetcher.Post)
 	if c.URLInfo == "" {
 		c.URLInfo = join(*u, "/api/remove")
 	}
-	b.PresetInfo, err = c.Server.MergeURL(c.URLInfo).CreatePreset()
+	b.PresetInfo, err = c.Server.MergeURL(c.URLInfo).MergeMethod(http.MethodPost).CreatePreset()
 	if err != nil {
 		return err
 	}
 	b.Bucket = c.Bucket
+	b.Passthrough = c.Passthrough
 	return nil
 }

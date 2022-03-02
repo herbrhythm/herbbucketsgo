@@ -7,6 +7,8 @@ import (
 	"github.com/herb-go/fetcher"
 )
 
+var ErrUnknownUploadType = errors.New("herbbucketsgo:unknown uploadtype")
+
 func convertErr(err error) error {
 	if fetcher.CompareResponseErrStatusCode(err, 404) {
 		return ErrNotExist
